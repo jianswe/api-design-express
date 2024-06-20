@@ -55,4 +55,9 @@ router.post('/updatepoint',
 )
 router.delete('/updatepoint/:id', () => {})
 
+router.use((err, req, res, next) => { // we need a separate error handler for router, it cannot popup to app error handler 
+    console.log(err)
+    res.json({message: 'in router handler'})
+})
+
 export default router 

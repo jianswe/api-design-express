@@ -1,17 +1,21 @@
 import prisma from '../db'
 
 // Get all products for current user 
-export const getProducts = async (req, res) => {
-    const user = await prisma.user.findUnique({
-        where: {
-            id: req.user.id
-        },
-        include: {
-            products: true // products are what we really want to query 
-        }
-    })
+export const getProducts = async (req, res, next) => {
+    try {
+        const user = await prisma.user.findUnique({
+            where: {
+                id: req.user.id
+            },
+            include: {
+                products: true // products are what we really want to query 
+            }
+        })
 
-    res.json({data: user.products})
+        res.json({data: user.products})
+    } catch(err) {
+        next(err)
+    }
 }
 
 // Get one 
@@ -28,15 +32,19 @@ export const getOneProduct = async (req, res) => {
     res.json({data: product})
 }
 
-export const createProduct = async (req, res) => {
-    const product = await prisma.product.create({
-        data: {
-            name: req.body.name, 
-            belongsToId: req.user.id
-        }
-    })
-
-    res.json({data: product})
+export const createProduct = async (req, res, next) => {
+    try {
+        const product = await prisma.product.create({
+            data: {
+                name: req.body.name, 
+                belongsToId: req.user.id
+            }
+        })
+    
+        res.json({data: product})
+    } catch (e) {
+        next(e)
+    }
 }
 
 export const updateProduct = async (req, res) => {
