@@ -16,15 +16,20 @@ app.use((req, res, next) => {
     req.shhhh_secret = 'doggy'
     next()
 })
-app.get('/', (req, res) => {
-    console.log('hello from express')
-    res.status(200)
-    res.json({message: 'hello'})
+app.get('/', (req, res, next) => { // error handler comes after route handler, that's why we use next here. 
+    setTimeout(() => {
+        next(new Error('error'))
+    }, 1)
 })
 
 app.use('/api', protect, router)
 
 app.post('/user', createNewUser)
 app.post('/signin', signin)
+
+app.use((err, req, res, next) => {
+    console.log(err)
+    res.json({message: `opps there was an error: ${err.message}`})
+})
 
 export default app
