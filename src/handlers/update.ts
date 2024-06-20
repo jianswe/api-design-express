@@ -2,11 +2,9 @@ import prisma from '../db'
 
 // Get one 
 export const getOneUpdate = async (req, res) => {
-    const id = req.params.id
-
-    const update = await prisma.update.findFirst({
+    const update = await prisma.update.findUnique({
         where: {
-            id
+            id: req.params.id
         }
     })
 
@@ -43,7 +41,11 @@ export const createUpdate = async (req, res) => {
     }
 
     const update = await prisma.update.create({
-        data: req.body
+        data: {
+            title: req.body.title, 
+            body: req.body.body, 
+            product: {connect: {id: product.id}}
+        }
     })
 
     res.json({data: update})

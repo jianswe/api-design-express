@@ -21,7 +21,7 @@ router.delete('/product/:id', deleteProduct)
  * Update
  */
 router.get('/update', getUpdates)
-router.get('/update/:id', () => getOneUpdate)
+router.get('/update/:id', getOneUpdate)
 router.put('/update/:id', 
     body('title').optional(), 
     body('body').optional(), 
